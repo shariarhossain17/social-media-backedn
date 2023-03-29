@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema.Types;
+const byCrypt = require("bcryptjs");
 
 const userSchema = mongoose.Schema(
   {
@@ -14,7 +15,6 @@ const userSchema = mongoose.Schema(
     userName: {
       type: String,
       required: [true, "must provided user name"],
-    //   unique: true,
     },
     password: {
       type: String,
@@ -66,6 +66,20 @@ const userSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// hash password
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  const password = this.password;
+
+  const hashPassword = byCrypt.hashSync(password);
+
+  this.password = hashPassword;
+
+  next();
+});
 
 const User = mongoose.model("User", userSchema);
 

@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true, "please provide name"],
+      required: [true, "please provide email"],
     },
     fullName: {
       type: String,
@@ -81,6 +81,13 @@ userSchema.pre("save", function (next) {
   next();
 });
 
+
+
+userSchema.methods.comparePassword = function(pass,hash) {
+
+    const isPassWordValid = byCrypt.compare(pass,hash)
+    return isPassWordValid;
+}
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

@@ -3,7 +3,7 @@ mongoose.set("strictQuery", true);
 const connectDb = async () => {
   try {
     await mongoose
-      .connect("mongodb://127.0.0.1:27017/mongodb", {
+      .connect("mongodb://127.0.0.1:27017/medium_share", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
       })

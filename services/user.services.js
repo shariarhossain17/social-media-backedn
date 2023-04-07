@@ -7,6 +7,6 @@ exports.createUserServices = async (userData) => {
 
 
 exports.logInUserService = async (email) => {
-  const user = await User.findOne({email})
+  const user = await User.findOne({email}).populate("post")
   return user
 } 

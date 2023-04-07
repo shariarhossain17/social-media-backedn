@@ -18,13 +18,13 @@ const postSchema = mongoose.Schema(
     likes: [
       {
         type: ObjectId,
-        ref: "likes",
+        ref: "Likes",
       },
     ],
     comments: [
       {
         type: ObjectId,
-        ref: "likes",
+        ref: "Comments",
       },
     ],
     desc: String,

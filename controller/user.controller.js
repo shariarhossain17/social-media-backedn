@@ -3,6 +3,7 @@ const {
   LoginUserService,
   logInUserService,
 } = require("../services/user.services");
+const { generateToken } = require("../utils/validator/Token");
 
 module.exports.createUser = async (req, res, next) => {
   try {
@@ -25,7 +26,7 @@ module.exports.logInUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(401).json({
+      return res.status(401).json({
         status: false,
         message: "please provide email and password",
       });
@@ -33,7 +34,7 @@ module.exports.logInUser = async (req, res, next) => {
     const user = await logInUserService(email);
 
     if (!user) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "cant't find account in this email",
       });
     }
@@ -41,16 +42,19 @@ module.exports.logInUser = async (req, res, next) => {
     const isPasswordValid = await user.comparePassword(password, user.password);
 
     if (!isPasswordValid) {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Password incorrect",
       });
     }
-
+    const token = generateToken(user)
     const { password: pwd, ...others } = user.toObject();
     res.status(201).json({
       status: true,
-      message: "user create success",
-      data: others,
+      message: "log in success",
+      data:{
+        token:token,
+        user:others
+      },
     });
   } catch (error) {
     res.status(400).json({

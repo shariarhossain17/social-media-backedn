@@ -39,6 +39,11 @@ const userSchema = mongoose.Schema(
       values: ["male", "female"],
       default: "",
     },
+    role: {
+      type: String,
+      enum: ["user", "admin", "super-admin"],
+      default: "user",
+    },
     post: [
       {
         type: ObjectId,
@@ -81,13 +86,10 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-
-
-userSchema.methods.comparePassword = function(pass,hash) {
-
-    const isPassWordValid = byCrypt.compare(pass,hash)
-    return isPassWordValid;
-}
+userSchema.methods.comparePassword = function (pass, hash) {
+  const isPassWordValid = byCrypt.compare(pass, hash);
+  return isPassWordValid;
+};
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
